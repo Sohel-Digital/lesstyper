@@ -1,0 +1,528 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>lesstyper - Waitlist</title>
+  <meta name="description" content="Join the lesstyper waitlist. Speak naturally and turn voice into text in any app." />
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;600&display=swap");
+
+    :root {
+      --bg: #0b0d10;
+      --bg-soft: #12161b;
+      --surface: #141922;
+      --surface-2: #1a202b;
+      --text: #f4f7fb;
+      --muted: #b7c0cd;
+      --line: #2a3342;
+      --accent: #8cc0ff;
+      --accent-2: #4f94ff;
+      --ok: #7de7bd;
+      --danger: #ff9a9a;
+      --radius: 18px;
+      --shadow: 0 20px 70px rgba(0, 0, 0, 0.4);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      font-family: "Space Grotesk", "Segoe UI", sans-serif;
+      background:
+        radial-gradient(900px 500px at 8% 0%, #1c2d45 0%, transparent 55%),
+        radial-gradient(900px 500px at 95% 0%, #102033 0%, transparent 45%),
+        var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    .wrap {
+      width: min(1100px, calc(100% - 2rem));
+      margin: 0 auto;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      backdrop-filter: blur(10px);
+      background: rgba(11, 13, 16, 0.78);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .topbar .wrap {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.9rem 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      text-decoration: none;
+      color: var(--text);
+    }
+    .brand-mark {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(145deg, #4f94ff, #7eb5ff);
+      color: #081121;
+      font-weight: 700;
+      box-shadow: 0 6px 18px rgba(79, 148, 255, 0.45);
+    }
+    .brand-name {
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+    }
+
+    .btn {
+      border: 1px solid var(--line);
+      color: var(--text);
+      background: linear-gradient(180deg, #1a202b, #141922);
+      border-radius: 12px;
+      padding: 0.7rem 1rem;
+      font: inherit;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 180ms ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+    .btn:hover { transform: translateY(-1px); border-color: #3a4760; }
+    .btn-primary {
+      color: #061326;
+      background: linear-gradient(180deg, #a6d0ff, #7eb5ff);
+      border-color: #7eb5ff;
+      box-shadow: 0 14px 30px rgba(79, 148, 255, 0.35);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 1.2rem;
+      padding: 3.3rem 0 1.4rem;
+      align-items: stretch;
+    }
+
+    .card {
+      background:
+        linear-gradient(150deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0) 36%),
+        var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .hero-left {
+      padding: 2.2rem;
+      display: grid;
+      align-content: center;
+      gap: 1.1rem;
+    }
+    .eyebrow {
+      font-size: 0.83rem;
+      letter-spacing: 1.6px;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 700;
+    }
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      line-height: 1.03;
+      letter-spacing: -0.02em;
+    }
+    .lead {
+      margin: 0;
+      color: var(--muted);
+      font-size: 1.03rem;
+      line-height: 1.6;
+      max-width: 64ch;
+    }
+    .pill-row {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+    .pill {
+      border: 1px solid #31415a;
+      border-radius: 100px;
+      color: #d2dbea;
+      background: #111722;
+      font-size: 0.82rem;
+      padding: 0.43rem 0.8rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.42rem;
+    }
+
+    .hero-right {
+      padding: 1.25rem;
+      display: grid;
+      gap: 0.9rem;
+      align-content: start;
+    }
+
+    form {
+      display: grid;
+      gap: 0.75rem;
+    }
+    .input {
+      width: 100%;
+      background: var(--surface-2);
+      color: var(--text);
+      border: 1px solid #2f394a;
+      border-radius: 12px;
+      padding: 0.78rem 0.9rem;
+      font: inherit;
+      outline: none;
+      transition: border-color 160ms ease, box-shadow 160ms ease;
+    }
+    .input:focus {
+      border-color: var(--accent-2);
+      box-shadow: 0 0 0 3px rgba(79, 148, 255, 0.2);
+    }
+    .hint {
+      font-family: "IBM Plex Mono", monospace;
+      color: #9fb3cf;
+      font-size: 0.76rem;
+      line-height: 1.45;
+      margin: 0;
+    }
+    .status {
+      border-radius: 12px;
+      padding: 0.7rem 0.85rem;
+      font-size: 0.92rem;
+      border: 1px solid transparent;
+      display: none;
+    }
+    .status.show { display: block; }
+    .status.ok {
+      color: #062115;
+      background: var(--ok);
+      border-color: #56b793;
+    }
+    .status.err {
+      color: #2c0909;
+      background: var(--danger);
+      border-color: #d06f6f;
+    }
+
+    .demo {
+      margin-top: 0.7rem;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: #0c1016;
+      padding: 1.3rem 1rem;
+      display: grid;
+      place-items: center;
+      min-height: 120px;
+    }
+    .record-badge {
+      width: 190px;
+      height: 56px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.84);
+      background: linear-gradient(180deg, #1a2030, #171b29);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.45);
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      position: relative;
+      isolation: isolate;
+    }
+    .record-badge::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(100deg, transparent 10%, rgba(255, 255, 255, 0.08) 35%, transparent 70%);
+      transform: translateX(-70%);
+      animation: sheen 4.6s linear infinite;
+      z-index: -1;
+    }
+    .wave {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+      height: 26px;
+    }
+    .wave i {
+      width: 3px;
+      background: #fff;
+      border-radius: 99px;
+      height: 8px;
+      animation: pulse 900ms ease-in-out infinite;
+      transform-origin: center;
+    }
+    .wave i:nth-child(2) { animation-delay: 70ms; }
+    .wave i:nth-child(3) { animation-delay: 120ms; }
+    .wave i:nth-child(4) { animation-delay: 220ms; }
+    .wave i:nth-child(5) { animation-delay: 120ms; }
+    .wave i:nth-child(6) { animation-delay: 70ms; }
+    .wave i:nth-child(7) { animation-delay: 0ms; }
+
+    .social {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.8rem;
+      margin: 1.3rem 0 0;
+    }
+    .social .card {
+      padding: 1rem 0.95rem;
+    }
+    .stat-num {
+      font-size: clamp(1.25rem, 2.5vw, 1.8rem);
+      font-weight: 700;
+      margin-bottom: 0.2rem;
+    }
+    .stat-label {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .feature-grid {
+      margin: 1.2rem 0 2.8rem;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.9rem;
+    }
+    .feature-grid .card { padding: 1rem; }
+    .f-title {
+      font-size: 1rem;
+      font-weight: 700;
+      margin: 0 0 0.35rem;
+    }
+    .f-text {
+      color: var(--muted);
+      margin: 0;
+      font-size: 0.95rem;
+      line-height: 1.55;
+    }
+
+    footer {
+      border-top: 1px solid rgba(255, 255, 255, 0.12);
+      padding: 1.1rem 0 2rem;
+      color: #95a3b8;
+      font-size: 0.9rem;
+    }
+
+    @keyframes pulse {
+      0%, 100% { height: 8px; opacity: 0.75; }
+      35% { height: 24px; opacity: 1; }
+    }
+    @keyframes sheen {
+      from { transform: translateX(-70%); }
+      to { transform: translateX(160%); }
+    }
+
+    @media (max-width: 960px) {
+      .hero {
+        grid-template-columns: 1fr;
+      }
+      .social { grid-template-columns: repeat(2, 1fr); }
+      .feature-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 640px) {
+      .wrap { width: min(1100px, calc(100% - 1rem)); }
+      .hero-left, .hero-right { padding: 1rem; }
+      .record-badge { width: 170px; }
+      .brand-name { font-size: 1.05rem; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap">
+      <a class="brand" href="#">
+        <span class="brand-mark">lt</span>
+        <span class="brand-name">lesstyper</span>
+      </a>
+      <a class="btn" href="#waitlist">Join Waitlist</a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="hero">
+      <article class="card hero-left">
+        <p class="eyebrow">Windows Voice Typing</p>
+        <h1>Speak naturally. Turn voice into text in any app.</h1>
+        <p class="lead">
+          lesstyper turns live speech into clean text with global shortcuts, fast insertion,
+          and dictionary replacements for names, products, and custom terms.
+        </p>
+        <div class="pill-row">
+          <span class="pill">Global hotkeys</span>
+          <span class="pill">Dictionary rules</span>
+          <span class="pill">History + stats</span>
+        </div>
+      </article>
+
+      <aside class="card hero-right" id="waitlist">
+        <h2 style="margin: 0.25rem 0 0.2rem; font-size: 1.35rem;">Get early access</h2>
+        <p class="hint">Join now and we will email you when the next build is ready.</p>
+
+        <form id="waitlist-form" novalidate>
+          <input class="input" id="fullName" name="fullName" type="text" placeholder="Full name" required />
+          <input class="input" id="email" name="email" type="email" placeholder="Work email" required />
+          <input class="input" id="useCase" name="useCase" type="text" placeholder="Use case (optional)" />
+          <button class="btn btn-primary" id="submitBtn" type="submit">Join the Waitlist</button>
+        </form>
+
+        <div id="status" class="status" role="status" aria-live="polite"></div>
+        <p class="hint" id="countHint">Current waitlist count: 0</p>
+
+        <div class="demo">
+          <div class="record-badge" aria-hidden="true">
+            <div class="wave">
+              <i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="social">
+      <div class="card">
+        <div class="stat-num" id="stat-waitlist">0</div>
+        <div class="stat-label">People on waitlist</div>
+      </div>
+      <div class="card">
+        <div class="stat-num">Ctrl+Alt+V</div>
+        <div class="stat-label">Default record shortcut</div>
+      </div>
+      <div class="card">
+        <div class="stat-num">40%+</div>
+        <div class="stat-label">Estimated typing time saved</div>
+      </div>
+      <div class="card">
+        <div class="stat-num">Windows</div>
+        <div class="stat-label">Built for desktop workflows</div>
+      </div>
+    </section>
+
+    <section class="feature-grid">
+      <article class="card">
+        <h3 class="f-title">Use It Anywhere</h3>
+        <p class="f-text">Dictate into browsers, docs, chats, CRM tools, and forms with one global start/stop shortcut.</p>
+      </article>
+      <article class="card">
+        <h3 class="f-title">Smart Dictionary</h3>
+        <p class="f-text">Auto-replace spoken phrases with your exact preferred terms to keep consistency in every output.</p>
+      </article>
+      <article class="card">
+        <h3 class="f-title">Fast Review Loop</h3>
+        <p class="f-text">Track latest transcription, history, WPM, and time saved from typing in a clean dashboard.</p>
+      </article>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">lesstyper © <span id="year"></span> • Waitlist landing page</div>
+  </footer>
+
+  <script>
+    (function () {
+      const STORAGE_KEY = "lesstyper_waitlist_v1";
+      const form = document.getElementById("waitlist-form");
+      const status = document.getElementById("status");
+      const submitBtn = document.getElementById("submitBtn");
+      const countHint = document.getElementById("countHint");
+      const statWaitlist = document.getElementById("stat-waitlist");
+      const emailInput = document.getElementById("email");
+      const nameInput = document.getElementById("fullName");
+      const year = document.getElementById("year");
+
+      year.textContent = String(new Date().getFullYear());
+
+      function readList() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          const parsed = raw ? JSON.parse(raw) : [];
+          return Array.isArray(parsed) ? parsed : [];
+        } catch {
+          return [];
+        }
+      }
+
+      function writeList(list) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+      }
+
+      function setStatus(type, message) {
+        status.className = "status show " + (type === "ok" ? "ok" : "err");
+        status.textContent = message;
+      }
+
+      function validEmail(value) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i.test(value);
+      }
+
+      function refreshCount() {
+        const list = readList();
+        const count = list.length;
+        countHint.textContent = "Current waitlist count: " + count;
+        statWaitlist.textContent = String(count);
+      }
+
+      form.addEventListener("submit", function (event) {
+        event.preventDefault();
+        const name = nameInput.value.trim();
+        const email = emailInput.value.trim().toLowerCase();
+        const useCase = document.getElementById("useCase").value.trim();
+
+        if (!name) {
+          setStatus("err", "Please enter your name.");
+          nameInput.focus();
+          return;
+        }
+        if (!validEmail(email)) {
+          setStatus("err", "Please enter a valid email.");
+          emailInput.focus();
+          return;
+        }
+
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Joining...";
+
+        const list = readList();
+        const exists = list.some(item => item.email === email);
+        if (exists) {
+          setStatus("err", "This email is already on the waitlist.");
+          submitBtn.disabled = false;
+          submitBtn.textContent = "Join the Waitlist";
+          return;
+        }
+
+        const entry = {
+          name,
+          email,
+          useCase,
+          createdAt: new Date().toISOString()
+        };
+        list.push(entry);
+        writeList(list);
+        refreshCount();
+        setStatus("ok", "You are in. We will notify you when early access opens.");
+        form.reset();
+
+        setTimeout(function () {
+          submitBtn.disabled = false;
+          submitBtn.textContent = "Join the Waitlist";
+        }, 350);
+      });
+
+      refreshCount();
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+name: Build macOS DMG
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - "voice_type.py"
+      - "requirements.txt"
+      - ".github/workflows/macos-dmg.yml"
+
+jobs:
+  build-macos-dmg:
+    runs-on: macos-13
+    timeout-minutes: 75
+    env:
+      APP_NAME: lesstyper
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip setuptools wheel
+          python -m pip install -r requirements.txt
+          python -m pip install pyinstaller
+
+      - name: Build macOS .app (PyInstaller)
+        run: |
+          pyinstaller --noconfirm --clean --windowed --name "${APP_NAME}" \
+            --collect-all faster_whisper \
+            --collect-all ctranslate2 \
+            --collect-all tokenizers \
+            --collect-all onnxruntime \
+            --collect-all av \
+            --collect-binaries sounddevice \
+            voice_type.py
+
+      - name: Package DMG
+        run: |
+          rm -rf dmg_root
+          mkdir -p dmg_root
+          cp -R "dist/${APP_NAME}.app" dmg_root/
+          hdiutil create \
+            -volname "${APP_NAME}" \
+            -srcfolder dmg_root \
+            -ov \
+            -format UDZO \
+            "dist/${APP_NAME}-macOS.dmg"
+
+      - name: Upload DMG Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: lesstyper-macos-dmg
+          path: dist/${{ env.APP_NAME }}-macOS.dmg
+          if-no-files-found: error
