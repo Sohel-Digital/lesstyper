@@ -12,7 +12,7 @@ on:
 
 jobs:
   build-macos-dmg:
-    runs-on: macos-13
+    runs-on: macos-15
     timeout-minutes: 75
     env:
       APP_NAME: lesstyper
