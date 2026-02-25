@@ -112,6 +112,248 @@ BENGALI_FONT_CANDIDATES = [
     "Arial Unicode MS",
 ]
 
+CODE_EDITOR_TITLE_HINTS = [
+    "visual studio code",
+    " - code",
+    "cursor",
+    "pycharm",
+    "intellij",
+    "webstorm",
+    "phpstorm",
+    "rider",
+    "sublime text",
+    "notepad++",
+    "android studio",
+    "xcode",
+    "vim",
+    "neovim",
+]
+
+BUILTIN_CODE_CORRECTIONS: list[tuple[str, str]] = [
+    # Common web/PHP filenames
+    ("main js", "main.js"),
+    ("mainjs", "main.js"),
+    ("main ts", "main.ts"),
+    ("main tsx", "main.tsx"),
+    ("main jsx", "main.jsx"),
+    ("header php", "header.php"),
+    ("header", "header.php"),
+    ("footer php", "footer.php"),
+    ("footer", "footer.php"),
+    ("functions php", "functions.php"),
+    ("config php", "config.php"),
+    ("routes php", "routes.php"),
+    ("index html", "index.html"),
+    ("index php", "index.php"),
+    ("index js", "index.js"),
+    ("index ts", "index.ts"),
+    ("index tsx", "index.tsx"),
+    ("index jsx", "index.jsx"),
+    ("read me", "README.md"),
+    ("readme", "README.md"),
+    ("package json", "package.json"),
+    ("packagejson", "package.json"),
+    ("git ignore", ".gitignore"),
+    ("docker file", "Dockerfile"),
+    ("docker compose", "docker-compose.yml"),
+    ("env file", ".env"),
+    ("next config", "next.config.js"),
+    ("ts config", "tsconfig.json"),
+    ("tailwind config", "tailwind.config.js"),
+    ("post css config", "postcss.config.js"),
+    ("eslint config", ".eslintrc.json"),
+    ("prettier config", ".prettierrc"),
+
+    # Common app asset/style/script names
+    ("style css", "style.css"),
+    ("app js", "app.js"),
+    ("app ts", "app.ts"),
+    ("app tsx", "App.tsx"),
+    ("app jsx", "App.jsx"),
+    ("global css", "globals.css"),
+    ("module css", "module.css"),
+    ("utils js", "utils.js"),
+    ("helpers js", "helpers.js"),
+    ("constants js", "constants.js"),
+    ("types ts", "types.ts"),
+    ("hook js", "hook.js"),
+    ("use effect", "useEffect"),
+    ("use state", "useState"),
+    ("use memo", "useMemo"),
+    ("use callback", "useCallback"),
+    ("async await", "async/await"),
+
+    # React framework terms/snippets
+    ("react jsx", ".jsx"),
+    ("react tsx", ".tsx"),
+    ("app tsx file", "App.tsx"),
+    ("main tsx file", "main.tsx"),
+    ("index tsx file", "index.tsx"),
+    ("component tsx", "Component.tsx"),
+    ("custom hook file", "useCustomHook.ts"),
+    ("react router dom", "react-router-dom"),
+    ("create root", "createRoot"),
+    ("use client", "\"use client\";"),
+    ("jsx fragment", "<></>"),
+    ("react fragment", "<React.Fragment></React.Fragment>"),
+    ("strict mode tag", "<React.StrictMode></React.StrictMode>"),
+    ("react component boilerplate", "const Component = () => {\n  return <div></div>;\n};"),
+    ("react function component", "export default function Component() {\n  return <div></div>;\n}"),
+    ("use state hook", "const [state, setState] = useState();"),
+    ("use effect hook", "useEffect(() => {\n\n}, []);"),
+    ("use memo hook", "useMemo(() => {\n  return value;\n}, [value]);"),
+    ("use callback hook", "useCallback(() => {\n\n}, []);"),
+    ("use ref hook", "const ref = useRef(null);"),
+    ("use context hook", "const value = useContext(AppContext);"),
+    ("use reducer hook", "const [state, dispatch] = useReducer(reducer, initialState);"),
+    ("use layout effect hook", "useLayoutEffect(() => {\n\n}, []);"),
+    ("use transition hook", "const [isPending, startTransition] = useTransition();"),
+    ("use deferred value hook", "const deferredValue = useDeferredValue(value);"),
+    ("react memo", "React.memo()"),
+    ("forward ref", "forwardRef"),
+    ("export default component", "export default Component;"),
+    ("lazy import component", "const Component = React.lazy(() => import(\"./Component\"));"),
+    ("suspense fallback", "<Suspense fallback={<div>Loading...</div>}></Suspense>"),
+    ("map jsx list", "{items.map((item) => (\n  <div key={item.id}>{item}</div>\n))}"),
+    ("class name", "className"),
+    ("on click", "onClick"),
+    ("on change", "onChange"),
+
+    # Laravel terms/snippets
+    ("laravel routes file", "routes/web.php"),
+    ("laravel api routes", "routes/api.php"),
+    ("laravel controller", "app/Http/Controllers/"),
+    ("laravel middleware", "app/Http/Middleware/"),
+    ("laravel model", "app/Models/"),
+    ("laravel migration", "database/migrations/"),
+    ("laravel seeder", "database/seeders/"),
+    ("laravel factory", "database/factories/"),
+    ("laravel blade", ".blade.php"),
+    ("blade file", "index.blade.php"),
+    ("layout blade", "layouts/app.blade.php"),
+    ("env example", ".env.example"),
+    ("artisan serve", "php artisan serve"),
+    ("artisan migrate", "php artisan migrate"),
+    ("artisan migrate fresh", "php artisan migrate:fresh"),
+    ("artisan seed", "php artisan db:seed"),
+    ("artisan make model", "php artisan make:model"),
+    ("artisan make controller", "php artisan make:controller"),
+    ("artisan make migration", "php artisan make:migration"),
+    ("artisan make request", "php artisan make:request"),
+    ("artisan make middleware", "php artisan make:middleware"),
+    ("artisan route list", "php artisan route:list"),
+    ("laravel route get", "Route::get('/', function () {\n    return view('welcome');\n});"),
+    ("laravel route post", "Route::post('/submit', [Controller::class, 'store']);"),
+    ("blade section", "@section('content')\n@endsection"),
+    ("blade yield", "@yield('content')"),
+    ("blade extends", "@extends('layouts.app')"),
+    ("blade csrf", "@csrf"),
+    ("eloquent where", "Model::where('column', $value)->get();"),
+    ("eloquent first or fail", "Model::where('id', $id)->firstOrFail();"),
+    ("laravel validation", "$request->validate([\n    'name' => 'required|string|max:255',\n]);"),
+
+    # WordPress terms/snippets
+    ("wordpress functions file", "functions.php"),
+    ("wordpress config file", "wp-config.php"),
+    ("wordpress plugin file", "plugin.php"),
+    ("wordpress theme style", "style.css"),
+    ("wordpress header file", "header.php"),
+    ("wordpress footer file", "footer.php"),
+    ("wordpress index file", "index.php"),
+    ("wordpress single file", "single.php"),
+    ("wordpress page file", "page.php"),
+    ("wordpress archive file", "archive.php"),
+    ("wordpress sidebar file", "sidebar.php"),
+    ("wordpress template part", "get_template_part()"),
+    ("wordpress hook action", "add_action('init', 'my_function');"),
+    ("wordpress hook filter", "add_filter('the_content', 'my_filter');"),
+    ("wordpress shortcode", "add_shortcode('my_shortcode', 'my_shortcode_callback');"),
+    ("wordpress enqueue script", "wp_enqueue_script('app', get_template_directory_uri() . '/assets/js/app.js', [], null, true);"),
+    ("wordpress enqueue style", "wp_enqueue_style('theme-style', get_stylesheet_uri(), [], null);"),
+    ("wordpress nonce field", "wp_nonce_field('my_action', 'my_nonce');"),
+    ("wordpress verify nonce", "if (!wp_verify_nonce($_POST['my_nonce'], 'my_action')) {\n    return;\n}"),
+    ("wordpress ajax action", "add_action('wp_ajax_my_action', 'my_ajax_handler');"),
+    ("wordpress query", "$query = new WP_Query(['post_type' => 'post']);"),
+    ("wordpress register post type", "register_post_type('book', [\n    'public' => true,\n    'label' => 'Books',\n]);"),
+    ("wordpress register taxonomy", "register_taxonomy('genre', ['book'], ['label' => 'Genre']);"),
+
+    # Python terms/snippets
+    ("python file", "main.py"),
+    ("requirements file", "requirements.txt"),
+    ("python virtual env", ".venv"),
+    ("python init file", "__init__.py"),
+    ("python main check", "if __name__ == \"__main__\":\n    main()"),
+    ("python class init", "def __init__(self):"),
+    ("python try except", "try:\n    pass\nexcept Exception as exc:\n    print(exc)"),
+    ("python with open", "with open('file.txt', 'r', encoding='utf-8') as f:\n    data = f.read()"),
+    ("python list comprehension", "[item for item in items]"),
+    ("python dictionary comprehension", "{k: v for k, v in items}"),
+    ("python async function", "async def my_function():\n    pass"),
+    ("python f string", "f\"{value}\""),
+    ("python type hint", "def func(value: str) -> None:\n    pass"),
+    ("python dataclass", "@dataclass\nclass MyData:\n    name: str"),
+    ("python fast api", "from fastapi import FastAPI\n\napp = FastAPI()"),
+    ("python flask app", "from flask import Flask\n\napp = Flask(__name__)"),
+    ("python django app", "python manage.py startapp"),
+    ("python pip install", "python -m pip install"),
+    ("python pytest", "pytest -q"),
+    ("python black format", "black ."),
+    ("python uvicorn run", "uvicorn main:app --reload"),
+    ("python logger", "import logging\n\nlogger = logging.getLogger(__name__)"),
+
+    # Extensions
+    ("dot js", ".js"),
+    ("dot ts", ".ts"),
+    ("dot tsx", ".tsx"),
+    ("dot jsx", ".jsx"),
+    ("dot json", ".json"),
+    ("dot md", ".md"),
+    ("dot yml", ".yml"),
+    ("dot yaml", ".yaml"),
+    ("dot html", ".html"),
+    ("dot css", ".css"),
+    ("dot php", ".php"),
+    ("dot py", ".py"),
+    ("dot env", ".env"),
+
+    # HTML/CSS snippets
+    ("div tag", "<div></div>"),
+    ("span tag", "<span></span>"),
+    ("paragraph tag", "<p></p>"),
+    ("section tag", "<section></section>"),
+    ("article tag", "<article></article>"),
+    ("header tag", "<header></header>"),
+    ("footer tag", "<footer></footer>"),
+    ("main tag", "<main></main>"),
+    ("nav tag", "<nav></nav>"),
+    ("button tag", "<button></button>"),
+    ("input tag", '<input type="text" />'),
+    ("form tag", "<form></form>"),
+    ("image tag", '<img src="" alt="" />'),
+    ("link tag", '<link rel="stylesheet" href="" />'),
+    ("script tag", "<script></script>"),
+    ("style tag", "<style></style>"),
+    ("html boilerplate", "<!doctype html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n  <title>Document</title>\n</head>\n<body>\n\n</body>\n</html>"),
+    ("anchor tag", '<a href=""></a>'),
+
+    # Common symbols/keywords
+    ("open bracket", "("),
+    ("close bracket", ")"),
+    ("open curly", "{"),
+    ("close curly", "}"),
+    ("open square", "["),
+    ("close square", "]"),
+    ("double equals", "=="),
+    ("triple equals", "==="),
+    ("not equals", "!="),
+    ("strict not equals", "!=="),
+    ("arrow function", "() => {}"),
+    ("console log", "console.log()"),
+    ("if statement", "if () {}"),
+    ("else if", "else if () {}"),
+    ("for loop", "for (let i = 0; i < ; i++) {}"),
+]
+
 
 def normalize_language_input(value: str) -> str:
     raw = value.strip().lower()
@@ -238,11 +480,15 @@ class VoiceTyperApp:
         self.model_reloading = False
 
         self.target_window_handle = 0
+        self.target_window_title = ""
 
         self.dictionary_store = DictionaryStore(self._resolve_dictionary_path())
         self.dictionary_entries = self.dictionary_store.load()
         self.dictionary_patterns: list[tuple[list[re.Pattern], str]] = []
         self._refresh_dictionary_patterns()
+        self.code_correction_patterns: list[tuple[list[re.Pattern], str]] = (
+            self._build_code_correction_patterns()
+        )
 
         if switched:
             print(
@@ -514,6 +760,7 @@ class VoiceTyperApp:
             return
 
         self.target_window_handle = self._get_foreground_window()
+        self.target_window_title = self._get_window_title(self.target_window_handle)
         self.recording = True
         with self.frames_lock:
             self.frames = []
@@ -665,6 +912,7 @@ class VoiceTyperApp:
         text = re.sub(r"\s+", " ", text).strip()
         if not text:
             return ""
+        code_context = self._is_programming_editor_context()
 
         if self.config.remove_fillers:
             text = re.sub(
@@ -676,10 +924,77 @@ class VoiceTyperApp:
             text = re.sub(r"\s+", " ", text).strip()
 
         text = re.sub(r"\s+([,.!?;:])", r"\1", text)
+        if code_context:
+            text = self._apply_code_corrections(text)
         text = self._apply_dictionary_rules(text)
-        if text and re.match(r"[A-Za-z]", text[0]):
+        if (not code_context) and text and re.match(r"[A-Za-z]", text[0]):
             text = text[0].upper() + text[1:]
         return text
+
+    def _apply_code_corrections(self, text: str) -> str:
+        if not self.code_correction_patterns:
+            return text
+
+        output = text
+        for patterns, replacement in self.code_correction_patterns:
+            for pattern in patterns:
+                output = pattern.sub(replacement, output)
+        return output
+
+    def _build_code_correction_patterns(self) -> list[tuple[list[re.Pattern], str]]:
+        compiled: list[tuple[list[re.Pattern], str]] = []
+        items = sorted(BUILTIN_CODE_CORRECTIONS, key=lambda item: len(item[0]), reverse=True)
+
+        for source, replacement in items:
+            normalized = " ".join(str(source).strip().split())
+            if not normalized:
+                continue
+
+            tokens = [part for part in re.split(r"\s+", normalized) if part]
+            raw_patterns: list[str] = []
+            seen: set[str] = set()
+
+            def add_pattern(pattern_text: str) -> None:
+                if pattern_text and pattern_text not in seen:
+                    seen.add(pattern_text)
+                    raw_patterns.append(pattern_text)
+
+            escaped = [re.escape(token) for token in tokens]
+            if len(escaped) == 1:
+                add_pattern(escaped[0])
+            else:
+                add_pattern(r"\s+".join(escaped))
+                add_pattern(r"(?:[\s._-]+)".join(escaped))
+                add_pattern(r"(?:[\s._-]*)".join(escaped))
+                add_pattern("".join(escaped))
+
+            if len(tokens) == 1 and tokens[0].isalnum():
+                prefix = r"(?<![\w.])"
+                suffix = r"(?![\w.])"
+            else:
+                prefix = r"(?<!\w)" if normalized[0].isalnum() else ""
+                suffix = r"(?!\w)" if normalized[-1].isalnum() else ""
+
+            entry_patterns = [
+                re.compile(prefix + pattern_text + suffix, flags=re.IGNORECASE)
+                for pattern_text in raw_patterns
+            ]
+            compiled.append((entry_patterns, replacement))
+
+        return compiled
+
+    def _is_programming_editor_context(self) -> bool:
+        title = (self.target_window_title or self._get_window_title(self.target_window_handle)).lower()
+        if not title:
+            return False
+        if any(hint in title for hint in CODE_EDITOR_TITLE_HINTS):
+            return True
+        return bool(
+            re.search(
+                r"\.(?:py|js|ts|tsx|jsx|php|html|css|json|md|java|c|cpp|cs|go|rs|rb|swift)\b",
+                title,
+            )
+        )
 
     def _apply_dictionary_rules(self, text: str) -> str:
         if not self.dictionary_patterns:
@@ -786,6 +1101,20 @@ class VoiceTyperApp:
             return int(ctypes.windll.user32.GetForegroundWindow())
         except Exception:
             return 0
+
+    def _get_window_title(self, hwnd: int) -> str:
+        if hwnd <= 0:
+            return ""
+        try:
+            user32 = ctypes.windll.user32
+            length = int(user32.GetWindowTextLengthW(hwnd))
+            if length <= 0:
+                return ""
+            buf = ctypes.create_unicode_buffer(length + 1)
+            user32.GetWindowTextW(hwnd, buf, length + 1)
+            return str(buf.value)
+        except Exception:
+            return ""
 
     def _focus_window(self, hwnd: int) -> None:
         if hwnd <= 0:
@@ -2200,7 +2529,7 @@ class VoiceTyperUI:
             highlightthickness=0,
             cursor="hand2",
             command=lambda p=page: self._show_page(p),
-        )
+        )         
         if inactive_icon is not None:
             btn.configure(image=inactive_icon, compound="left")
         btn.pack(fill="x", padx=0, pady=4)
