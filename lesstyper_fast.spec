@@ -2,15 +2,11 @@
 from PyInstaller.utils.hooks import collect_data_files
 from PyInstaller.utils.hooks import collect_dynamic_libs
 
-# Keep one-file startup fast by bundling only runtime assets (not full package trees).
 datas = []
 binaries = []
 hiddenimports = ["fontawesomefree"]
 
-# Whisper runtime assets used by faster-whisper.
 datas += collect_data_files("faster_whisper", includes=["assets/*"])
-
-# Font Awesome TTF used for UI glyph rendering.
 datas += collect_data_files(
     "fontawesomefree",
     includes=[
@@ -19,19 +15,16 @@ datas += collect_data_files(
     ],
 )
 
-# Runtime native libraries.
 for pkg_name in ("sounddevice", "ctranslate2", "av"):
     try:
         binaries += collect_dynamic_libs(pkg_name)
     except Exception:
         pass
 
-# Explicitly exclude large frameworks not used by this app at runtime.
 excludes = ["onnxruntime", "tensorflow", "torch", "torchvision", "torchaudio"]
 
-
 a = Analysis(
-    ['voice_type.py'],
+    ["voice_type.py"],
     pathex=[],
     binaries=binaries,
     datas=datas,
@@ -48,20 +41,27 @@ pyz = PYZ(a.pure)
 exe = EXE(
     pyz,
     a.scripts,
-    a.binaries,
-    a.datas,
     [],
-    name='lesstyper',
+    exclude_binaries=True,
+    name="lesstyper_fast",
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
     upx=False,
-    upx_exclude=[],
-    runtime_tmpdir=None,
     console=False,
     disable_windowed_traceback=False,
     argv_emulation=False,
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
+)
+
+coll = COLLECT(
+    exe,
+    a.binaries,
+    a.datas,
+    strip=False,
+    upx=False,
+    upx_exclude=[],
+    name="lesstyper_fast",
 )

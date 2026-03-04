@@ -41,6 +41,7 @@ jobs:
             --collect-all tokenizers \
             --collect-all onnxruntime \
             --collect-all av \
+            --collect-all fontawesomefree \
             --collect-binaries sounddevice \
             voice_type.py
 

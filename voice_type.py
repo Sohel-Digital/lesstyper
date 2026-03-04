@@ -456,7 +456,7 @@ class VoiceTyperApp:
         )
         self.config.model_size = compatible_model
         self.model_lock = threading.Lock()
-        self.model = WhisperModel(self.config.model_size, device="cpu", compute_type="int8")
+        self.model: WhisperModel | None = None
 
         self.recording = False
         self.stream: sd.InputStream | None = None
@@ -583,10 +583,17 @@ class VoiceTyperApp:
         if not self.worker.is_alive():
             self.worker.start()
         self._bind_hotkeys()
+        self._ensure_model_loading()
         self._emit("status", value="idle")
         self._emit_stats()
         self._emit("dictionary_updated", entries=self.get_dictionary_entries())
-        self._emit("message", text=f"{self.APP_NAME} is ready")
+        if self.model is None or self.model_reloading:
+            self._emit(
+                "message",
+                text="Loading speech model in background. UI is ready.",
+            )
+        else:
+            self._emit("message", text=f"{self.APP_NAME} is ready")
 
     def run_headless(self) -> None:
         self.start()
@@ -690,6 +697,8 @@ class VoiceTyperApp:
         self._bind_hotkeys()
 
         should_reload_model = compatible_model != self.config.model_size
+        if self.model is None:
+            should_reload_model = True
         if should_reload_model:
             self._reload_model_async(compatible_model)
             if auto_switched:
@@ -707,7 +716,13 @@ class VoiceTyperApp:
 
         return True, "Settings saved."
 
-    def _reload_model_async(self, model_size: str) -> None:
+    def _ensure_model_loading(self) -> None:
+        with self.model_reload_lock:
+            should_load = self.model is None and not self.model_reloading
+        if should_load:
+            self._reload_model_async(self.config.model_size, initial=True)
+
+    def _reload_model_async(self, model_size: str, initial: bool = False) -> None:
         with self.model_reload_lock:
             if self.model_reloading:
                 self._emit("message", text="Model load already in progress")
@@ -715,13 +730,19 @@ class VoiceTyperApp:
             self.model_reloading = True
 
         def _load() -> None:
-            self._emit("message", text=f"Loading model: {model_size}")
+            if initial:
+                self._emit("message", text=f"Preparing speech model: {model_size}")
+            else:
+                self._emit("message", text=f"Loading model: {model_size}")
             try:
                 new_model = WhisperModel(model_size, device="cpu", compute_type="int8")
                 with self.model_lock:
                     self.model = new_model
                 self.config.model_size = model_size
-                self._emit("message", text=f"Model ready: {model_size}")
+                if initial:
+                    self._emit("message", text=f"Model ready: {model_size}")
+                else:
+                    self._emit("message", text=f"Model ready: {model_size}")
             except Exception as exc:
                 self._emit("error", text=f"Model load failed: {exc}")
             finally:
@@ -757,6 +778,19 @@ class VoiceTyperApp:
 
     def _start_recording(self) -> None:
         if self.recording or self.shutdown_event.is_set():
+            return
+
+        with self.model_reload_lock:
+            model_loading = self.model_reloading
+        with self.model_lock:
+            model_ready = self.model is not None
+
+        if (not model_ready) or model_loading:
+            self._ensure_model_loading()
+            self._emit(
+                "message",
+                text="Speech model is loading. Please wait a few seconds and try again.",
+            )
             return
 
         self.target_window_handle = self._get_foreground_window()
@@ -871,23 +905,43 @@ class VoiceTyperApp:
         try:
             with self.model_lock:
                 model = self.model
+            if model is None:
+                raise RuntimeError("Speech model is still loading. Please wait and try again.")
             initial_prompt = None
             if self.config.language == "bn":
                 initial_prompt = (
                     "বাংলা ভাষার অডিওকে শুধু বাংলা লিপিতে লিখুন। "
                     "ইংরেজি অক্ষরে ট্রান্সলিটারেশন করবেন না।"
                 )
-            segments, _ = model.transcribe(
-                wav_path,
-                language=self.config.language or None,
-                beam_size=1,
-                best_of=1,
-                temperature=0.0,
-                vad_filter=True,
-                vad_parameters={"min_silence_duration_ms": 250},
-                condition_on_previous_text=False,
-                initial_prompt=initial_prompt,
-            )
+            base_kwargs = {
+                "language": self.config.language or None,
+                "beam_size": 1,
+                "best_of": 1,
+                "temperature": 0.0,
+                "condition_on_previous_text": False,
+                "initial_prompt": initial_prompt,
+            }
+            try:
+                segments, _ = model.transcribe(
+                    wav_path,
+                    vad_filter=True,
+                    vad_parameters={"min_silence_duration_ms": 250},
+                    **base_kwargs,
+                )
+            except Exception as exc:
+                err = str(exc).lower()
+                if "onnxruntime" in err and ("vad" in err or "silero" in err):
+                    self._emit(
+                        "message",
+                        text="ONNX Runtime not found. Running transcription without VAD.",
+                    )
+                    segments, _ = model.transcribe(
+                        wav_path,
+                        vad_filter=False,
+                        **base_kwargs,
+                    )
+                else:
+                    raise
             text = " ".join(seg.text.strip() for seg in segments if seg.text.strip())
             return self._cleanup_text(text)
         finally:
@@ -1702,6 +1756,7 @@ class VoiceTyperUI:
 
     def _find_fontawesome_font_path(self) -> Path | None:
         candidates: list[Path] = []
+        frozen_roots: list[Path] = []
 
         try:
             import fontawesomefree
@@ -1725,6 +1780,7 @@ class VoiceTyperUI:
         meipass = getattr(sys, "_MEIPASS", None)
         if meipass:
             mp = Path(meipass)
+            frozen_roots.append(mp)
             candidates.extend(
                 [
                     mp
@@ -1742,12 +1798,52 @@ class VoiceTyperUI:
             )
 
         local_base = Path(__file__).resolve().parent
+        frozen_executable = None
+        if getattr(sys, "frozen", False):
+            try:
+                frozen_executable = Path(sys.executable).resolve()
+            except Exception:
+                frozen_executable = None
+        if frozen_executable is not None:
+            exe_dir = frozen_executable.parent
+            frozen_roots.extend(
+                [
+                    exe_dir,
+                    exe_dir.parent,
+                    exe_dir.parent / "Resources",
+                    exe_dir.parent.parent / "Resources",
+                    exe_dir.parent.parent / "Contents" / "Resources",
+                ]
+            )
+
         candidates.extend(
             [
                 local_base / "webfonts" / "fa-solid-900.ttf",
                 local_base / "assets" / "webfonts" / "fa-solid-900.ttf",
             ]
         )
+        for root in frozen_roots:
+            candidates.extend(
+                [
+                    root / "fontawesomefree" / "webfonts" / "fa-solid-900.ttf",
+                    root
+                    / "fontawesomefree"
+                    / "static"
+                    / "fontawesomefree"
+                    / "webfonts"
+                    / "fa-solid-900.ttf",
+                    root
+                    / "fontawesomefree"
+                    / "static"
+                    / "fontawesomefree"
+                    / "js-packages"
+                    / "@fortawesome"
+                    / "fontawesome-free"
+                    / "webfonts"
+                    / "fa-solid-900.ttf",
+                    root / "webfonts" / "fa-solid-900.ttf",
+                ]
+            )
         try:
             import site
 
@@ -1788,6 +1884,7 @@ class VoiceTyperUI:
         if meipass:
             search_roots.append(Path(meipass))
         search_roots.append(local_base)
+        search_roots.extend(frozen_roots)
 
         for root in search_roots:
             try:
@@ -3746,7 +3843,6 @@ class VoiceTyperUI:
                 self.overlay.show_processing()
                 self.root.after(10, self._restore_window_if_auto_minimized)
             elif status == "idle":
-                self.status_var.set("Ready")
                 self._set_recording_buttons(False)
                 self.overlay.hide()
                 self.root.after(10, self._restore_window_if_auto_minimized)
